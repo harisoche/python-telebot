@@ -2,4 +2,4 @@
 /venv
 /env
 __pycache__/
-data/user_message.txt
+/data/user_message.txt

@@ -2,7 +2,7 @@ import logging
 from telegram.ext import Application
 
 from config import BOT_TOKEN
-from handlers import start_handler, echo_handlers, new_data_handler, update_name_handler, update_age_handler
+from handlers import start_handler, conv_add_data, conv_update_name, conv_update_age, show_data_handler
 
 # Set up logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -13,13 +13,12 @@ def main():
 
     # Add your handlers here
     updater.add_handler(start_handler)
-    updater.add_handler(echo_handlers)
-    updater.add_handler(new_data_handler)
-    updater.add_handler(update_name_handler)
-    updater.add_handler(update_age_handler)
+    updater.add_handler(conv_add_data)
+    updater.add_handler(conv_update_name)
+    updater.add_handler(conv_update_age)
+    updater.add_handler(show_data_handler)
 
     updater.run_polling()
-    # updater.idle()
 
 if __name__ == '__main__':
     main()

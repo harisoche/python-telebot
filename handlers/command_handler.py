@@ -1,4 +1,4 @@
-from utils import get_file_path
+from utils import get_file_path, update_data, find_data
 from telegram.ext import CommandHandler, CallbackContext
 from telegram import Update
 import json
@@ -54,21 +54,13 @@ async def update_age(update: Update, context: CallbackContext):
 
 update_age_handler = CommandHandler('update_age', update_age, has_args=True)
 
-def update_data(chat_id, file_path, value, key):
-    with open(file_path, "r+") as file:
-        lines = file.readlines()
-        for i, line in enumerate(lines):
-            parts = line.strip().split(":")
-            if int(parts[0]) == chat_id:
-                data = json.loads(":".join(parts[1:]))
-                if key == "age":
-                    data["age"] = value
-                elif key == "name":
-                    data["name"] = value
+async def show_data(update: Update, context: CallbackContext):
+    file_path = get_file_path()
+    user_id = update.message.chat_id
+    data = find_data(user_id, file_path)
+    if data is not None:
+        return await update.message.reply_text(f"Your data: name {data['name']} and age {data['age']}")
 
-                updated_line = f"{chat_id}:{json.dumps(data)}\n"
-                lines[i] = updated_line
-                file.seek(0)
-                file.writelines(lines)
-                break
+    await update.message.reply_text("No data found.")
 
+show_data_handler = CommandHandler('show_data', show_data)
